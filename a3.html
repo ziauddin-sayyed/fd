@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Sayyed FD</title>
+<meta name="description" content="Give tasks site." />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<link rel="stylesheet" href="res/bootstrap.min.css" >
+<script src="res/jquery.js"></script>
+<script src="res/bootstrap.min.js" ></script>
+<script src="res/bootstrap.bundle.min.js" ></script>
+</head>
+<style>
+    #code_log{text-align: left;}
+    #show_code_btn{
+        display: none;
+    }
+</style>
+<body>
+
+    <center>
+        <img src="imgs/q3.png" alt=""><br>
+        <input id="n_val" size="35" type="text" placeholder="Please input an integer (0 by default)"/>
+        <br><br>
+        <button onclick="exec()">Execute</button>&nbsp;
+        <button id="show_code_btn" onclick="show_code()">Show code</button><br><br>
+        <div id="log"></div>
+        <pre id="code_log"></pre>
+    </center>
+
+    <script id='script_code' type='text/javascript'>
+        function sum_sq_dig(num) {
+            var digits = [];var sum = 0;
+            while (num > 0) {
+                digits.push(num % 10);
+                num = parseInt(num / 10);
+            }
+            (digits.reverse()).forEach(e => {
+                sum += e *e;
+            });
+            ;
+            return sum;
+        }
+
+        function show_code() {
+            $("#code_log").html($('#script_code').html());
+        }
+
+        var sqrlis = [];
+        var DEFAULT_MAX_DIGITS = 20;    
+        
+        function Initsqrlis()
+        {
+            for (var i = 1; i <= 40; i++){
+                sqrlis.push(i*i);
+            }
+        }
+
+        var vector_out = {};
+        var factorial= [];
+
+        function InitFacto()
+        {
+            factorial[0] = 1;
+            for (var i = 1; i <= DEFAULT_MAX_DIGITS; i++){
+                factorial[i] = factorial[i-1] * i;
+            }
+        }
+        
+        function IsValid(dimension)
+        {
+            var dig_coun = 0;
+            for (var i = 0; i < dimension; i++){
+                dig_coun += vector_out[i];
+            }
+        
+            if (dimension < 10){
+                return dig_coun <= DEFAULT_MAX_DIGITS;
+            }
+            return dig_coun == DEFAULT_MAX_DIGITS;
+        }
+        
+        var total_digit_sum = 0;
+        
+        function Process()
+        {
+            var sum = 0;
+            for (var i = 1; i < 10; i++){
+                sum = sum + vector_out[i] * i * i;
+            }
+            if(sqrlis.indexOf(sum) === -1){
+                // brea;
+                return;
+            }
+            var permutation_count = factorial[DEFAULT_MAX_DIGITS];
+            var digit_sum = 0;
+            for (var i = 0; i < 10; i++){
+                permutation_count/= factorial[vector_out[i]];
+                digit_sum += vector_out[i] * i;
+            }
+            total_digit_sum += digit_sum * permutation_count/DEFAULT_MAX_DIGITS;
+            total_digit_sum %= 1000000000;
+            // console.log(total_digit_sum);
+        }
+        
+        function Backtrack(dimension)
+        {
+            if (!IsValid(dimension)){
+                return;
+            }
+            if (dimension == 10){
+                Process();
+                return;
+            }
+            for (var i = 0; i <= DEFAULT_MAX_DIGITS; i++){
+                vector_out[dimension] = i;
+                Backtrack(dimension + 1);
+            }
+        }
+
+        function exec() {
+            $.when(document.getElementById("log").innerHTML = "Please wait...")
+            .then(setTimeout(() => execute(), 0));
+        }
+
+        function execute(){
+            Initsqrlis();
+            InitFacto();
+            Backtrack(0);
+            var r = total_digit_sum;
+            var final = {};
+            for (var i = 0; i < 9; i++){
+                final[i] = Math.trunc(r % 10);
+                r /= 10;
+                r += total_digit_sum;
+            }
+            var fin_val =  "";
+            for (var i = 8; i >= 0; i--){
+                fin_val += ""+final[i];
+            }
+            // console.log(fin_val);
+            var val = parseInt(document.getElementById("n_val").value);
+            isNaN(val) ? val = 0 : false;
+            $("#log").empty();
+            $("#log").append("<span>Sum of square of digits of "+val+" is  : &emsp;"+sum_sq_dig(val)+"</span><br>");
+            $("#log").append("<span>Last nine digits of the sum of all n, 0 < n < 10<sup>20</sup> is : &emsp;"+fin_val+"</span>");
+            $("#show_code_btn").css("display","initial");
+        }
+        
+        </script>    
+
+</body>
+
+</html>
