@@ -1,0 +1,356 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta name="description" content="Give tasks site." />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<link rel="stylesheet" href="res/bootstrap.min.css" >
+<script src="res/jquery.js"></script>
+<script src="res/bootstrap.min.js" ></script>
+<script src="res/bootstrap.bundle.min.js" ></script>
+</head>
+<style>
+    #code_log,#log{text-align: left;}
+    #show_code_btn{
+        display: none;
+    }
+</style>
+<body>
+
+    <center>
+        <img src="imgs/q4.png" alt=""><br>
+        <button onclick="exec()">Execute</button>&nbsp;
+        <button id="show_code_btn" onclick="show_code()">Show code</button><br><br>
+        <div style="text-align: left;" id="log"></div>
+        <pre id="code_log"></pre>
+    </center>
+
+
+
+<script id='script_code' type='text/javascript'>
+
+    function show_code() {
+        $("#log").empty();
+        // console.log($('#script_code').html());
+        $("#code_log").html($('#script_code').html());
+    }
+    function print() {
+        if (typeof console === "object") {
+            console.log.apply(console, arguments);
+        }
+    }
+    function range(start, stop, step) {
+        var length, idx, range;
+        if (arguments.length <= 1) {
+            stop = start || 0;
+            start = 0;
+        }
+        step = arguments[2] || 1;
+        length = Math.max(Math.ceil((stop - start) / step), 0);
+        idx = 0;
+        range = new Array(length);
+        while (idx < length) {
+            range[idx++] = start;
+            start += step;
+        }
+        return range;
+    }
+    function Iterable(iterable) {
+        var tmp;
+        if (iterable.constructor === [].constructor || iterable.constructor === "".constructor || (tmp = Array.prototype.slice.call(iterable)).length) {
+            return tmp || iterable;
+        }
+        if (Set && iterable.constructor === Set) {
+            return Array.from(iterable);
+        }
+        return Object.keys(iterable);
+    }
+    function py_eq(a, b) {
+        var py_itr6, py_idx6;
+        var i;
+        if (a === b) {
+            return true;
+        }
+        if (a === void 0 || b === void 0 || a === null || b === null) {
+            return false;
+        }
+        if (a.constructor !== b.constructor) {
+            return false;
+        }
+        if (Array.isArray(a)) {
+            if (a.length !== b.length) {
+                return false;
+            }
+            for (i = 0; i < a.length; i++) {
+                if (!py_eq(a[i], b[i])) {
+                    return false;
+                }
+            }
+            return true;
+        } else if (a.constructor === Object) {
+            if (Object.keys(a).length !== Object.keys(b).length) {
+                return false;
+            }
+            py_itr6 = Iterable(a);
+            for (py_idx6 = 0; py_idx6 < py_itr6.length; py_idx6++) {
+                i = py_itr6[py_idx6];
+                if (!py_eq(a[i], b[i])) {
+                    return false;
+                }
+            }
+            return true;
+        } else if ((Set && a.constructor === Set) || (Map && a.constructor === Map)) {
+            if (a.size !== b.size) {
+                return false;
+            }
+            for (i of a) {
+                if (!b.has(i)) {
+                    return false;
+                }
+            }
+            return true;
+        } else if (a.constructor === Date) {
+            return a.getTime() === b.getTime();
+        } else if (typeof a.__eq__ === "function") {
+            return a.__eq__(b);
+        }
+        return false;
+    }
+        var py__1, py__2, py__3, py__4;
+        var Factorial =
+            ((py__1 = function Factorial() {
+                Factorial.prototype.__init__.apply(this, arguments);
+            }),
+            Object.defineProperties(py__1.prototype, {
+                __init__: {
+                    enumerable: true,
+                    writable: true,
+                    value: function __init__(bound) {
+                        var self = this;
+                        self.values = self.__init_values(bound);
+                    },
+                },
+                __init_values: {
+                    enumerable: true,
+                    writable: true,
+                    value: function __init_values(bound) {
+                        var self = this;
+                        var values, i;
+                        values = [1];
+                        for (i = 1; i < bound + 1; i++) {
+                            values.push(values[values.length - 1] * i);
+                        }
+                        return values;
+                    },
+                },
+            }),
+            py__1);
+        var Divisor =
+            ((py__2 = function Divisor() {
+                Divisor.prototype.__init__.apply(this, arguments);
+            }),
+            Object.defineProperties(py__2.prototype, {
+                __init__: {
+                    enumerable: true,
+                    writable: true,
+                    value: function __init__(bound) {
+                        var self = this;
+                        self.values = self.__init_values(bound);
+                    },
+                },
+                __init_values: {
+                    enumerable: true,
+                    writable: true,
+                    value: function __init_values(bound) {
+                        var py_itr2, py_idx2;
+                        var self = this;
+                        var i, values, j;
+                        values = (function () {
+                            var py_idx1,
+                                py_itr1 = Iterable(range(bound + 1)),
+                                py_res = [],
+                                i;
+                            for (py_idx1 = 0; py_idx1 < py_itr1.length; py_idx1++) {
+                                i = py_itr1[py_idx1];
+                                py_res.push([]);
+                            }
+                            return py_res;
+                        })();
+                        for (i = 1; i < bound + 1; i++) {
+                            py_itr2 = Iterable(range(i, bound + 1, i));
+                            for (py_idx2 = 0; py_idx2 < py_itr2.length; py_idx2++) {
+                                j = py_itr2[py_idx2];
+                                values[j].push(i);
+                            }
+                        }
+                        return values;
+                    },
+                },
+            }),
+            py__2);
+        var EulerTotientFunction =
+            ((py__3 = function EulerTotientFunction() {
+                EulerTotientFunction.prototype.__init__.apply(this, arguments);
+            }),
+            Object.defineProperties(py__3.prototype, {
+                __init__: {
+                    enumerable: true,
+                    writable: true,
+                    value: function __init__(bound) {
+                        var self = this;
+                        self.values = self.__init_values(bound);
+                    },
+                },
+                __init_values: {
+                    enumerable: true,
+                    writable: true,
+                    value: function __init_values(bound) {
+                        var py_itr4, py_idx4;
+                        var self = this;
+                        var i, values, j;
+                        values = (function () {
+                            var py_idx3,
+                                py_itr3 = Iterable(range(bound + 1)),
+                                py_res = [],
+                                i;
+                            for (py_idx3 = 0; py_idx3 < py_itr3.length; py_idx3++) {
+                                i = py_itr3[py_idx3];
+                                py_res.push(i);
+                            }
+                            return py_res;
+                        })();
+                        for (i = 2; i < bound + 1; i++) {
+                            if (values[i] !== i) {
+                                continue;
+                            }
+                            py_itr4 = Iterable(range(i, bound + 1, i));
+                            for (py_idx4 = 0; py_idx4 < py_itr4.length; py_idx4++) {
+                                j = py_itr4[py_idx4];
+                                values[j] = values[j] - Math.floor(values[j] / i);
+                            }
+                        }
+                        return values;
+                    },
+                },
+            }),
+            py__3);
+        var Problem =
+            ((py__4 = function Problem() {
+                Problem.prototype.__init__.apply(this, arguments);
+            }),
+            Object.defineProperties(py__4.prototype, {
+                __init__: {
+                    enumerable: true,
+                    writable: true,
+                    value: function __init__() {
+                        var self = this;
+                        self.factorial = new Factorial(100);
+                        self.divisor = new Divisor(100);
+                        self.euler_totient_function = new EulerTotientFunction(100);
+                    },
+                },
+                solve: {
+                    enumerable: true,
+                    writable: true,
+                    value: function solve() {
+                        var self = this;
+                        var fin = self.get(Math.pow(10, 15));
+                        print(fin);
+                        $("#log").prepend("&emsp;<h5>Sum of all f(m,n): "+fin+"</h5>");
+                        
+                    },
+                },
+                get: {
+                    enumerable: true,
+                    writable: true,
+                    value: function get(bound) {
+                        var self = this;
+                        return self.get_trivial_case(bound) + self.get_nontrivial_case(bound);
+                    },
+                },
+                get_trivial_case: {
+                    enumerable: true,
+                    writable: true,
+                    value: function get_trivial_case(bound) {
+                        var self = this;
+                        var result, m, x;
+                        result = 0;
+                        m = 2;
+                        while (true) {
+                            x = self.f(m, 1);
+                            if (x > bound) {
+                                break;
+                            } else {
+                                $("#log").append("&emsp;f("+m+",1)---"+x+"<br>");
+                                result += x;
+                                ++m;
+                            }
+                        }
+                        return result;
+                    },
+                },
+                get_nontrivial_case: {
+                    enumerable: true,
+                    writable: true,
+                    value: function get_nontrivial_case(bound) {
+                        var self = this;
+                        var result, m, n, x;
+                        result = 0;
+                        m = 2;
+                        while (true) {
+                            n = 2;
+                            while (true) {
+                                x = self.f(m, n);
+                                if (x > bound) {
+                                    break;
+                                } else {
+                                    $("#log").append("&emsp;f("+m+","+n+")---"+x+"<br>");
+                                    console.log(x);
+                                    result += x;
+                                    ++n;
+                                }
+                            }
+                            if (n === 2) {
+                                break;
+                            } else {
+                                ++m;
+                            }
+                        }
+                        return result;
+                    },
+                },
+                f: {
+                    enumerable: true,
+                    writable: true,
+                    value: function f(m, n) {
+                        var py_itr5, py_idx5;
+                        var self = this;
+                        var result, n_divisor, d;
+                        if (n === 1) {
+                            return self.factorial.values[m - 1];
+                        }
+                        result = 0;
+                        n_divisor = self.divisor.values[n];
+                        py_itr5 = Iterable(n_divisor);
+                        for (py_idx5 = 0; py_idx5 < py_itr5.length; py_idx5++) {
+                            d = py_itr5[py_idx5];
+                            result += Math.floor(self.factorial.values[d * m] / Math.pow(self.factorial.values[d], m)) * self.euler_totient_function.values[Math.floor(n / d)];
+                        }
+                        result = Math.floor(result / (m * n));
+                        return result;
+                    },
+                },
+            }),
+            py__4);
+        function exec() {
+            var problem;
+            $("#code_log").empty();
+            problem = new Problem();
+            problem.solve();
+            $("#show_code_btn").css("display","initial");
+        }
+        // exec();
+
+    </script>
+</body>
+
+</html>
